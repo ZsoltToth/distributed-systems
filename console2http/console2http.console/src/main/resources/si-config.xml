@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xmlns:int-http="http://www.springframework.org/schema/integration/http"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+        http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd
+        http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+        ">
+
+	<int:gateway
+		service-interface="hu.uni.miskolc.iit.distributed.console2http.console.gateway.TemperatureConverterGateway"
+		id="temperatureConverterGateway" default-request-channel="tempConverterChannel"/>
+
+	<int:channel id="tempConverterChannel" />
+
+	<int-http:outbound-gateway request-channel="tempConverterChannel"
+		url="http://localhost:8080/console2http.webapp/temperature/f2c"
+		http-method="GET" expected-response-type="java.lang.String" />
+
+</beans>
