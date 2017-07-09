@@ -14,12 +14,20 @@
 
 	<int:gateway
 		service-interface="hu.uni.miskolc.iit.distributed.console2http.console.gateway.TemperatureConverterGateway"
-		id="temperatureConverterGateway" default-request-channel="tempConverterChannel"/>
+		id="temperatureConverterGateway" default-request-channel="tempConverterChannel">
+		<int:method name="celsius2fahrenheit">
+		</int:method>
+        <int:method name="fahrenheit2celsius">
+            <int:header name=""></int:header>
+        </int:method>
+	</int:gateway>
 
 	<int:channel id="tempConverterChannel" />
 
 	<int-http:outbound-gateway request-channel="tempConverterChannel"
 		url="http://localhost:8080/console2http.webapp/temperature/f2c"
-		http-method="GET" expected-response-type="java.lang.String" />
+		http-method="GET" expected-response-type="java.lang.String">
+        <int-http:uri-variable name="fahrenheit" expression="0"/>
+    </int-http:outbound-gateway>
 
 </beans>
