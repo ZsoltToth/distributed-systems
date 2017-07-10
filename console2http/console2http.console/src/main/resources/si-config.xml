@@ -14,23 +14,31 @@
 
 	<int:gateway
 		service-interface="hu.uni.miskolc.iit.distributed.console2http.console.gateway.TemperatureConverterGateway"
-		id="temperatureConverterGateway" default-request-channel="tempConverterChannel">
-		<int:method name="celsius2fahrenheit">
-		</int:method>
-        <int:method name="fahrenheit2celsius">
-        </int:method>
+		id="temperatureConverterGateway">
+		<int:method name="celsius2fahrenheit"  request-channel="F2CReqChannel" request-timeout="1000" />
+        <int:method name="fahrenheit2celsius" request-channel="C2FReqChannel" request-timeout="1000" />
 	</int:gateway>
 
     <int-stream:stdout-channel-adapter id="stdOutAdapter" channel="stdOutChannel" append-newline="true"/>
-
-	<int:channel id="tempConverterChannel" />
+    <int:channel id="F2CReqChannel"/>
+    <int:channel id="C2FReqChannel"/>
     <int:channel id="stdOutChannel"/>
 
-	<int-http:outbound-gateway request-channel="tempConverterChannel"
-		url="http://localhost:8080/console2http.webapp/temperature/f2c?fahrenheit={fahrenheit}"
-		http-method="GET" expected-response-type="java.lang.String"
-        reply-channel="stdOutChannel">
-        <int-http:uri-variable name="fahrenheit" expression="payload"/>
+
+	<int-http:outbound-gateway request-channel="F2CReqChannel"
+		url="http://localhost:8080/console2http.webapp/temperature/f2c?fahrenheit={temperature}"
+		http-method="GET" expected-response-type="java.lang.String">
+        <int-http:uri-variable name="temperature" expression="payload"/>
+    </int-http:outbound-gateway>
+
+    <int-http:outbound-gateway request-channel="C2FReqChannel"
+                               url="http://localhost:8080/console2http.webapp/temperature/c2f?celsius={temperature}"
+                               http-method="GET"
+                               expected-response-type="java.lang.String"
+
+
+    >
+        <int-http:uri-variable name="temperature" expression="payload"/>
     </int-http:outbound-gateway>
 
 </beans>

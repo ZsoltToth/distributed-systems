@@ -4,6 +4,6 @@ import org.springframework.integration.annotation.Payload;
 
 public interface TemperatureConverterGateway {
 
-	double celsius2fahrenheit(@Payload double celsius);
-	double fahrenheit2celsius(@Payload double fahrenheit);
+	String celsius2fahrenheit(@Payload double celsius);
+	String fahrenheit2celsius(@Payload double fahrenheit);
 }
