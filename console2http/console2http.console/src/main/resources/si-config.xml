@@ -18,16 +18,19 @@
 		<int:method name="celsius2fahrenheit">
 		</int:method>
         <int:method name="fahrenheit2celsius">
-            <int:header name=""></int:header>
         </int:method>
 	</int:gateway>
 
+    <int-stream:stdout-channel-adapter id="stdOutAdapter" channel="stdOutChannel" append-newline="true"/>
+
 	<int:channel id="tempConverterChannel" />
+    <int:channel id="stdOutChannel"/>
 
 	<int-http:outbound-gateway request-channel="tempConverterChannel"
-		url="http://localhost:8080/console2http.webapp/temperature/f2c"
-		http-method="GET" expected-response-type="java.lang.String">
-        <int-http:uri-variable name="fahrenheit" expression="0"/>
+		url="http://localhost:8080/console2http.webapp/temperature/f2c?fahrenheit={fahrenheit}"
+		http-method="GET" expected-response-type="java.lang.String"
+        reply-channel="stdOutChannel">
+        <int-http:uri-variable name="fahrenheit" expression="payload"/>
     </int-http:outbound-gateway>
 
 </beans>
