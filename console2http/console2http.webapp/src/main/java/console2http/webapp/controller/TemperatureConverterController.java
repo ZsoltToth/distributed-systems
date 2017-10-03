@@ -17,13 +17,13 @@ public class TemperatureConverterController {
 	
 	@RequestMapping(value= {"/c2f","/celsius2fahrenheit"}, method = {RequestMethod.GET})
 	@ResponseBody
-	public double celsius2fahrenheit(double celsius) {
+	public Double celsius2fahrenheit(double celsius) {
 		return tempConverter.celsius2fahrenheit(celsius);
 	}
 	
 	@RequestMapping(value= {"/f2c","/fahrenheit2celsius"}, method = {RequestMethod.GET})
 	@ResponseBody
-	public double fahrenheit2celsius(double fahrenheit) {
+	public Double fahrenheit2celsius(double fahrenheit) {
 		return tempConverter.fahrenheit2celsius(fahrenheit);
 	}
 }
