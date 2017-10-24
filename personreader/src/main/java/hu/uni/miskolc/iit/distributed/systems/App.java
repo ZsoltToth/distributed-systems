@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit.distributed.systems;
 
+import hu.uni.miskolc.iit.distributed.egov.ps.model.Gender;
 import hu.uni.miskolc.iit.distributed.egov.ps.model.Person;
 import hu.uni.miskolc.iit.distributed.systems.gateway.PersonSearchGateway;
 import org.springframework.context.ApplicationContext;
@@ -7,6 +8,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+
+import java.util.Date;
 
 /**
  * Hello world!
@@ -32,6 +35,17 @@ public class App
             System.out.println(person.getFirstName()+" "+person.getLastName());
         }
 //        System.out.println(gateway.listAllPeople());
+
+        gateway.addPerson(
+                new Person(
+                        "Alma",
+                        "Bor",
+                        Gender.FEMALE,
+                        new Date(),
+                        null,
+                        null,
+                        null)
+        );
 
     }
 }

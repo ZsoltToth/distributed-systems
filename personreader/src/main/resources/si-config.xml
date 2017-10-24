@@ -16,6 +16,7 @@
         <int:method name="listAllPeople"
                     request-channel="peopleRequestChannel"
                     request-timeout="1000"/>
+        <int:method name="addPerson" request-channel="personRegistrationRequestChannel"/>
     </int:gateway>
 
     <int:channel id="PersonRequestChannel"/>
@@ -24,6 +25,7 @@
     <int:channel id="chatChannel"/>
     <int:channel id="surveillanceChannel"/>
 
+    <int:channel id="personRegistrationRequestChannel"/>
     <int:channel id="peopleRequestChannel"/>
 
     <int:recipient-list-router id="chatRouter" input-channel="chatChannel">
@@ -42,6 +44,19 @@
                                url="http://localhost:8080/people/all"
                                http-method="GET"
                                expected-response-type="hu.uni.miskolc.iit.distributed.egov.ps.model.Person[]">
+    </int-http:outbound-gateway>
+
+    <int-http:outbound-gateway
+            request-channel="personRegistrationRequestChannel"
+            url="http://localhost:8080/person/register?fn={fn}&amp;ln={ln}&amp;gender={gender}&amp;birth={birth}"
+            http-method="GET"
+            reply-channel="stdOutChannel"
+            expected-response-type="java.lang.String">
+
+        <int-http:uri-variable name="fn" expression="payload.getFirstName()"/>
+        <int-http:uri-variable name="ln" expression="payload.getLastName()"/>
+        <int-http:uri-variable name="gender" expression="payload.getSex()"/>
+        <int-http:uri-variable name="birth" expression="(new java.text.SimpleDateFormat('yyyy-MM-dd')).format(payload.getBirthDate())"/>
     </int-http:outbound-gateway>
 
 </beans>

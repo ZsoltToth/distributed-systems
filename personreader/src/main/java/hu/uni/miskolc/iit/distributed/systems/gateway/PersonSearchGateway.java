@@ -12,4 +12,10 @@ public interface PersonSearchGateway {
 
     @Payload("new java.util.Date()")
     Collection<Person> listAllPeople();
+
+    /**
+     * fn,ln,gender, birth(yyyy-MM-dd)
+     * @param person
+     */
+    void addPerson(@Payload Person person);
 }
