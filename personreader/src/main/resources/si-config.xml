@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+       xmlns:int-file="http://www.springframework.org/schema/integration/file"
+       xmlns:int-http="http://www.springframework.org/schema/integration/http"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+        http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd
+        http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+        ">
+
+    <int:gateway id="PersonSearchGateway" service-interface="hu.uni.miskolc.iit.distributed.systems.gateway.PersonSearchGateway" >
+        <int:method name="listAllPeople"
+                    request-channel="peopleRequestChannel"
+                    request-timeout="1000"/>
+    </int:gateway>
+
+    <int:channel id="PersonRequestChannel"/>
+
+    <int:channel id="stdOutChannel"/>
+    <int:channel id="chatChannel"/>
+    <int:channel id="surveillanceChannel"/>
+
+    <int:channel id="peopleRequestChannel"/>
+
+    <int:recipient-list-router id="chatRouter" input-channel="chatChannel">
+        <int:recipient channel="stdOutChannel"/>
+        <int:recipient channel="surveillanceChannel"/>
+    </int:recipient-list-router>
+
+
+
+    <int-stream:stdout-channel-adapter id="stdOutAdapter" channel="stdOutChannel" append-newline="true"/>
+
+    <int-file:outbound-channel-adapter id="surveillanceAdapter" channel="surveillanceChannel" directory="surveilance" filename-generator-expression="'chat.log'" mode="APPEND"/>
+
+
+    <int-http:outbound-gateway request-channel="peopleRequestChannel"
+                               url="http://localhost:8080/people/all"
+                               http-method="GET"
+                               expected-response-type="hu.uni.miskolc.iit.distributed.egov.ps.model.Person[]">
+    </int-http:outbound-gateway>
+
+</beans>
