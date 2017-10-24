@@ -31,7 +31,7 @@ public class PersonDAODummy implements PersonDAO {
     }
 
     public void createPerson(Person person) {
-
+        people.add(person);
     }
 
     public Collection<Person> readAllPeople() {
