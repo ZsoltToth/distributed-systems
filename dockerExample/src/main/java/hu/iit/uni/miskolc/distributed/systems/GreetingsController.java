@@ -9,6 +9,6 @@ public class GreetingsController {
 
     @RequestMapping("/hello")
     public String sayHello(@RequestParam("name") String name){
-        return String.format("Hello %s",name);
+        return String.format("Hello %s",name).toUpperCase();
     }
 }
