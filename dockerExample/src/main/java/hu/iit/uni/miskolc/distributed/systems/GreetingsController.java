@@ -11,4 +11,9 @@ public class GreetingsController {
     public String sayHello(@RequestParam("name") String name){
         return String.format("Hello %s",name).toUpperCase();
     }
+
+    @RequestMapping("/byebye")
+    public String byebye(@RequestParam("name") String name){
+        return String.format("Bye bye %s",name).toUpperCase();
+    }
 }
